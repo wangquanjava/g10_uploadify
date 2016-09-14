@@ -5,9 +5,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/uploadify/uploadify.css">
-<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-3.1.0.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/uploadify/jquery.uploadify.js"></script>
+<!-- 这个uploadifive需要用到$.size()方法。但是在jquery3中已经没有这个方法了。 -->
+<script type="text/javascript" src="${pageContext.request.contextPath }/js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/uploadifive_wangquan/jquery.uploadifive.js"></script>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/uploadifive_wangquan/uploadifive.css">
 </head>
 <body>
 	<input type="file" multiple="true" name="fileInput" id="fileInput">
@@ -21,22 +22,22 @@
 $(function() {
 // 	上传队列所有文件
 	$("#uploadButton").click(function() {
-		$("#fileInput").uploadify('upload','*');
+		$("#fileInput").uploadifive('upload');
 	});
 	
 // 	取消队列
 	$("#cancelButton").click(function() {
-		$("#fileInput").uploadify('cancel','*');
+		$("#fileInput").uploadifive('cancel');
 	});
 	
 	//给按钮绑定对象
-	$("#fileInput").uploadify({
-		uploader:'${pageContext.request.contextPath }/uploadFile',
+	$("#fileInput").uploadifive({
+		uploadScript:'${pageContext.request.contextPath }/uploadFile',
 		auto:false,
 		fileObjName:'fileFieldName',
-		swf:'${pageContext.request.contextPath }/uploadify/uploadify.swf',
 		multi: true,
-		onUploadSuccess:function(file, data, response){
+		simUploadLimit:3,
+		onUploadComplete:function(file, data, response){
 			alert("上传成功，文件名是:"+JSON.parse(data).filePath);
 		}
 	});
