@@ -10,22 +10,34 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/uploadify/jquery.uploadify.js"></script>
 </head>
 <body>
-	<input type="file" multiple="true" name="files" id="files">
+	<input type="file" multiple="true" name="fileInput" id="fileInput">
 	
 	
-	<a href="javascript:$('#files').uploadifyUpload()">上传</a>|
-	<a href="javascript:$('#files').uploadifyClearQueue()">取消上传</a>
+	<a id="uploadButton" href="javascript:void(0)">上传</a>|
+	<a id="cancelButton" href="javascript:void(0)">取消上传</a>
 	
 	
 <script type="text/javascript">
 $(function() {
-	$("#files").uploadify({
+// 	上传队列所有文件
+	$("#uploadButton").click(function() {
+		$("#fileInput").uploadify('upload','*');
+	});
+	
+// 	取消队列
+	$("#cancelButton").click(function() {
+		$("#fileInput").uploadify('cancel','*');
+	});
+	
+	//给按钮绑定对象
+	$("#fileInput").uploadify({
 		uploader:'${pageContext.request.contextPath }/uploadFile',
 		auto:false,
-		fileObjName,'files',
+		fileObjName:'fileFieldName',
 		swf:'${pageContext.request.contextPath }/uploadify/uploadify.swf',
-		onUploadSuccess:function(){
-			alert("上传成功");
+		multi: true,
+		onUploadSuccess:function(file, data, response){
+			alert("上传成功，文件名是:"+JSON.parse(data).filePath);
 		}
 	});
 });
